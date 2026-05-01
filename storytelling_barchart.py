@@ -86,3 +86,15 @@ for spine in ax.spines.values():
 
 
 
+
+# negative space on the graph for negative space. 
+ax.xaxis.grid(True, color='#FFFFFF', linewidth=1.5, zorder=0)
+ax.yaxis.grid(False)
+
+#  typography formatting -- should be on the bottom, slightly to the left. 
+ax.set_xlabel("DAILY VOLATILITY (STANDARD DEVIATION %)", fontweight='bold', loc='left', color=TEXT_COLOR, labelpad=10)
+ax.tick_params(axis='x', colors=TEXT_COLOR, length=0, labelsize=10)
+ax.tick_params(axis='y', length=0, labelsize=10, colors=TEXT_COLOR)
+
+# Top-left alignment label -- Assert teller for the Y axis.
+ax.text(-0.02, 1.05, 'ASSET', transform=ax.transAxes, fontweight='bold', color=TEXT_COLOR, ha='right')
