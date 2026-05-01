@@ -119,4 +119,17 @@ except IndexError:
 
 
 
+# Here i want to emphasize explanotory text to get good storytelling, so that the customor gets good insight.
+fig.suptitle("Which assets expose portfolios to extreme daily price fluctuations?", 
+             x=0.1, y=0.96, ha='left', fontsize=14, color=TEXT_COLOR, fontweight='bold')
+
+# Subtitle to explain to the customeer
+ax.text(0, 1.10, "Measured by the standard deviation of daily returns. Higher values dictate higher systemic risk.", 
+        transform=ax.transAxes, fontsize=10, color='#666666', ha='left', style='italic')
+
+plt.subplots_adjust(left=0.2, top=0.82, right=0.95, bottom=0.15)
+
+#  getting the barchart into the figures map 
+fig.savefig("figures/volatility_barchart.png", dpi=250, bbox_inches='tight', facecolor=fig.get_facecolor())
+plt.show()
 
