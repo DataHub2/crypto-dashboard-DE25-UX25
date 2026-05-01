@@ -23,3 +23,18 @@ gold["Asset"] = "Gold"
 combined = pd.concat([trump, gold], ignore_index=True).dropna(subset=["date", "price"])
 combined = combined.sort_values(["Asset", "date"])
 
+# Use same time period for both
+start_date = max(
+    combined[combined["Asset"] == "TRUMP Coin"]["date"].min(),
+    combined[combined["Asset"] == "Gold"]["date"].min()
+)
+
+end_date = min(
+    combined[combined["Asset"] == "TRUMP Coin"]["date"].max(),
+    combined[combined["Asset"] == "Gold"]["date"].max()
+)
+
+combined = combined[(combined["date"] >= start_date) & (combined["date"] <= end_date)].copy()
+
+
+
