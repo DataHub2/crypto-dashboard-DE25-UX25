@@ -93,6 +93,46 @@ fig.text(
 fig.text(0.08, 0.775, "━ Gold", fontsize=15, color=GOLD, fontweight="bold")
 fig.text(0.18, 0.775, "━ TRUMP Coin", fontsize=15, color=TRUMP, fontweight="bold")
 
+# Labels
+ax.text(-0.10, 1.02, "PERFORMANCE INDEX",
+        transform=ax.transAxes, fontsize=11, fontweight="bold", color=TEXT)
+
+ax.text(combined["date"].min() - pd.Timedelta(days=70), 100,
+        "Start = 100", fontsize=11, color=SUB, style="italic", va="center")
+
+for asset_df, name, color in [
+    (gold_df, "Gold", GOLD),
+    (trump_df, "TRUMP Coin", TRUMP)
+]:
+    last = asset_df.iloc[-1]
+    ax.text(last["date"] + pd.Timedelta(days=10),
+            last["Performance Index"],
+            name,
+            color=color,
+            fontsize=13,
+            fontweight="bold")
+
+# Notes
+g_point = gold_df.iloc[int(len(gold_df) * 0.6)]
+t_point = trump_df.iloc[int(len(trump_df) * 0.7)]
+
+ax.annotate(
+    "Steadier growth path",
+    xy=(g_point["date"], g_point["Performance Index"]),
+    xytext=(g_point["date"] - pd.Timedelta(days=80), 150),
+    fontsize=12, color=TEXT,
+    arrowprops=dict(arrowstyle="-", color=TEXT)
+)
+
+ax.annotate(
+    "Early spikes do not last",
+    xy=(t_point["date"], t_point["Performance Index"]),
+    xytext=(t_point["date"] - pd.Timedelta(days=100), 45),
+    fontsize=12, color=TEXT,
+    arrowprops=dict(arrowstyle="-", color=TEXT)
+)
+
+
 
 
 
