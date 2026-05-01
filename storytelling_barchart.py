@@ -35,5 +35,32 @@ for coin in df["coin_id"].unique(): # Loops through each unique coin_id
 # Process traditional asset (Gold)
 gdf = gold.sort_values("date").copy()
 gdf["daily_return"] = gdf["Close"].pct_change() * 100
-g_volatility = gdf["daily_return"].std()
-results.append({"Asset": "gold", "Volatility": g_volatility})
+gold_volatility = gdf["daily_return"].std()
+results.append({"Asset": "gold", "Volatility": gold_volatility})
+
+# DataFrame for plotting
+df_plot = pd.DataFrame(results) 
+
+# Nname mapping for better visualization, So that the names show up readble fo the customer, and to make sure that we dont get the name directly from my dataset.
+name_map = {
+    "dogwifcoin": "Dogwifhat",
+    "floki": "Floki",
+    "official-trump": "TRUMP Coin",
+    "bitcoin": "Bitcoin",
+    "gold": "Gold"
+}
+df_plot["Asset"] = df_plot["Asset"].map(name_map)
+
+# (largest volatility) sits at the top
+df_plot = df_plot.sort_values("Volatility", ascending=True).reset_index(drop=True)
+
+# Colors we will be working with, yes kokchun i got the inspiration from you!
+
+BG_COLOR = '#E5E7E8'
+BAR_GRAY = '#AEB0B2'
+BAR_HIGHLIGHT = '#2A4354'
+TEXT_COLOR = '#333333'
+
+fig, ax = plt.subplots(figsize=(10, 6.5))
+fig.patch.set_facecolor(BG_COLOR)
+ax.set_facecolor(BG_COLOR)
