@@ -73,6 +73,27 @@ ax.set_xlim(combined["date"].min() - pd.Timedelta(days=20),
 
 ax.set_xlabel("DATE", fontweight="bold", labelpad=15, color=TEXT)
 
+# Title and text
+fig.suptitle(
+    "Gold holds value while TRUMP Coin falls after early speculation",
+    x=0.08, y=0.93, ha="left",
+    fontsize=22, fontweight="bold", color=TEXT
+)
+
+fig.text(
+    0.08, 0.865,
+    "Both assets start at 100, so it is easier to compare them.\n"
+    "Gold moves up more slowly and steadily.\n"
+    "TRUMP Coin rises quickly in the beginning, but then drops a lot.",
+    fontsize=12, color=SUB, ha="left", va="top",
+    linespacing=1.35, style="italic"
+)
+
+# Legend
+fig.text(0.08, 0.775, "━ Gold", fontsize=15, color=GOLD, fontweight="bold")
+fig.text(0.18, 0.775, "━ TRUMP Coin", fontsize=15, color=TRUMP, fontweight="bold")
+
+
 
 
 
