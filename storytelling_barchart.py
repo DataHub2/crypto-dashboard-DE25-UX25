@@ -98,3 +98,25 @@ ax.tick_params(axis='y', length=0, labelsize=10, colors=TEXT_COLOR)
 
 # Top-left alignment label -- Assert teller for the Y axis.
 ax.text(-0.02, 1.05, 'ASSET', transform=ax.transAxes, fontweight='bold', color=TEXT_COLOR, ha='right')
+
+#  Annotation 
+# Here we are trying to annotate the two stable assets (Bitcoin and Gold) with a bracket and a text to that they are more stable.
+try:
+    y_btc = df_plot[df_plot['Asset'] == 'Bitcoin'].index[0]
+    y_gold = df_plot[df_plot['Asset'] == 'Gold'].index[0]
+    
+    # calculate Midpoint between the two stable assets
+
+    y_mid = (y_btc + y_gold) / 2
+    max_val = max(df_plot.loc[y_btc, 'Volatility'], df_plot.loc[y_gold, 'Volatility']) # Get the maximum volatility value between Bitcoin and Gold to position the bracket and text.
+
+    #  bracket and text
+    ax.text(max_val + 0.3, y_mid - 0.1, '}', fontsize=42, color=TEXT_COLOR, va='center', ha='left', weight='light')
+    ax.text(max_val + 0.8, y_mid, 'provides predictable risk exposure', fontsize=11, color=TEXT_COLOR, va='center', ha='left')
+except IndexError:
+    pass 
+
+
+
+
+
