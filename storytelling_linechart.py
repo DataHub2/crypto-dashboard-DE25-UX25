@@ -59,6 +59,20 @@ ax.plot(gold_df["date"], gold_df["Performance Index"], color=GOLD, linewidth=3)
 ax.plot(trump_df["date"], trump_df["Performance Index"], color=TRUMP, linewidth=3)
 ax.axhline(100, color="#999999", linestyle="--", linewidth=1.2)
 
+# Clean style
+for spine in ax.spines.values():
+    spine.set_visible(False)
+
+ax.yaxis.grid(True, color=GRID)
+ax.xaxis.grid(False)
+ax.tick_params(length=0, labelsize=12, colors=TEXT)
+
+ax.set_ylim(20, 185)
+ax.set_xlim(combined["date"].min() - pd.Timedelta(days=20),
+            combined["date"].max() + pd.Timedelta(days=80))
+
+ax.set_xlabel("DATE", fontweight="bold", labelpad=15, color=TEXT)
+
 
 
 
