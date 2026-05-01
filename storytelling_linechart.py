@@ -45,6 +45,19 @@ gold_df = combined[combined["Asset"] == "Gold"]
 trump_df = combined[combined["Asset"] == "TRUMP Coin"]
 
 
+# Colors, added gold color to match "Gold" and red color to match "TRUMP Coin"
+# Note i got help with the colors and figure design from the LLM, i wanted to make sure that the colors are not to bright and also that they match the assets that they represent.
+BG, TEXT, SUB, GRID = "#E5E7E8", "#222222", "#555555", "#D0D0D0"
+GOLD, TRUMP = "#8A5E13", "#A30F18"
+
+fig, ax = plt.subplots(figsize=(18, 10))
+fig.patch.set_facecolor(BG)
+ax.set_facecolor(BG)
+
+# Lines
+ax.plot(gold_df["date"], gold_df["Performance Index"], color=GOLD, linewidth=3)
+ax.plot(trump_df["date"], trump_df["Performance Index"], color=TRUMP, linewidth=3)
+ax.axhline(100, color="#999999", linestyle="--", linewidth=1.2)
 
 
 
