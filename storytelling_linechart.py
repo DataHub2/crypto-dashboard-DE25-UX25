@@ -36,5 +36,20 @@ end_date = min(
 
 combined = combined[(combined["date"] >= start_date) & (combined["date"] <= end_date)].copy()
 
+# Make both start at 100, this is a way for me to able to compare the assets from a stable and fair perspektiv.
+combined["Performance Index"] = combined.groupby("Asset")["price"].transform(
+    lambda x: (x / x.iloc[0]) * 100
+)
+
+gold_df = combined[combined["Asset"] == "Gold"]
+trump_df = combined[combined["Asset"] == "TRUMP Coin"]
+
+
+
+
+
+
+
+
 
 
