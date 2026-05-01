@@ -19,8 +19,7 @@ gold["date"] = pd.to_datetime(gold["Date"] if "Date" in gold.columns else gold["
 gold = gold[["date", "Close"]].rename(columns={"Close": "price"})
 gold["Asset"] = "Gold"
 
-
-
-
-
+# put both "assets" together
+combined = pd.concat([trump, gold], ignore_index=True).dropna(subset=["date", "price"])
+combined = combined.sort_values(["Asset", "date"])
 
