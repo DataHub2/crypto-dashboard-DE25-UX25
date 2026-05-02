@@ -116,6 +116,7 @@ for asset_df, name, color in [
 g_point = gold_df.iloc[int(len(gold_df) * 0.6)]
 t_point = trump_df.iloc[int(len(trump_df) * 0.7)]
 
+# this annotation is for the gold to emphasize the steady growth of it.
 ax.annotate(
     "Steadier growth path",
     xy=(g_point["date"], g_point["Performance Index"]),
@@ -123,7 +124,7 @@ ax.annotate(
     fontsize=12, color=TEXT,
     arrowprops=dict(arrowstyle="-", color=TEXT)
 )
-
+# this annotation is for the trump coin to emphasize the risk with this.
 ax.annotate(
     "Early spikes do not last",
     xy=(t_point["date"], t_point["Performance Index"]),
@@ -133,7 +134,24 @@ ax.annotate(
 )
 
 
+# Main takeaway, this is going to give us a clear description on the top right side so that the main takeaway is clear.
+fig.text(
+    0.80, 0.90,
+    "Main takeaway:\n\nGold is more stable,\nwhile TRUMP Coin\nloses value over time.",
+    fontsize=13, color=TEXT, ha="left", va="top",
+    bbox=dict(facecolor="#E8E8E8", edgecolor="#444", boxstyle="round,pad=0.6")
+)
 
+plt.subplots_adjust(left=0.12, right=0.92, top=0.70, bottom=0.12)
+
+plt.savefig(
+    "figures/Trumpcoin_vs_Gold.png",
+    dpi=250,
+    bbox_inches="tight",
+    facecolor=fig.get_facecolor()
+)
+
+plt.show()
 
 
 
