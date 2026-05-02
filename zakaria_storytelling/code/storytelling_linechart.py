@@ -1,0 +1,161 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import glob
+
+# Reading in crypto Data.
+df = pd.read_csv("data/interim/master_cleaned.csv")
+df["date"] = pd.to_datetime(df["date"])
+
+# Isolating the trump coin data.
+trump = df[df["coin_id"] == "official-trump"][["date","price"]].copy()
+trump["Asset"]="TRUMP Coin"
+
+# Read gold data
+gold = pd.read_csv(glob.glob("data/interim/Download Data*.csv")[0])
+gold.columns = gold.columns.str.strip() 
+gold["Close"] = gold["Close"].astype(str).str.replace(",", "", regex=False).astype(float)
+gold["date"] = pd.to_datetime(gold["Date"] if "Date" in gold.columns else gold["date"])
+
+gold = gold[["date", "Close"]].rename(columns={"Close": "price"})
+gold["Asset"] = "Gold"
+
+# Put both "assets" together
+combined = pd.concat([trump, gold], ignore_index=True).dropna(subset=["date", "price"])
+combined = combined.sort_values(["Asset", "date"])
+
+# Use same time period for both
+start_date = max(
+    combined[combined["Asset"] == "TRUMP Coin"]["date"].min(),
+    combined[combined["Asset"] == "Gold"]["date"].min()
+)
+
+end_date = min(
+    combined[combined["Asset"] == "TRUMP Coin"]["date"].max(),
+    combined[combined["Asset"] == "Gold"]["date"].max()
+)
+
+combined = combined[(combined["date"] >= start_date) & (combined["date"] <= end_date)].copy()
+
+# Make both start at 100, this is a way for me to able to compare the assets from a stable and fair perspektiv.
+combined["Performance Index"] = combined.groupby("Asset")["price"].transform(
+    lambda x: (x / x.iloc[0]) * 100
+)
+
+gold_df = combined[combined["Asset"] == "Gold"]
+trump_df = combined[combined["Asset"] == "TRUMP Coin"]
+
+
+# Colors, added gold color to match "Gold" and red color to match "TRUMP Coin"
+# Note i got help with the colors and figure design from the LLM, i wanted to make sure that the colors are not to bright and also that they match the assets that they represent.
+BG, TEXT, SUB, GRID = "#E5E7E8", "#222222", "#555555", "#D0D0D0"
+GOLD, TRUMP = "#8A5E13", "#A30F18"
+
+fig, ax = plt.subplots(figsize=(18, 10))
+fig.patch.set_facecolor(BG)
+ax.set_facecolor(BG)
+
+# Lines
+ax.plot(gold_df["date"], gold_df["Performance Index"], color=GOLD, linewidth=3)
+ax.plot(trump_df["date"], trump_df["Performance Index"], color=TRUMP, linewidth=3)
+ax.axhline(100, color="#999999", linestyle="--", linewidth=1.2)
+
+# Clean style
+for spine in ax.spines.values():
+    spine.set_visible(False)
+
+ax.yaxis.grid(True, color=GRID)
+ax.xaxis.grid(False)
+ax.tick_params(length=0, labelsize=12, colors=TEXT)
+
+ax.set_ylim(20, 185)
+ax.set_xlim(combined["date"].min() - pd.Timedelta(days=20),
+            combined["date"].max() + pd.Timedelta(days=80))
+
+ax.set_xlabel("DATE", fontweight="bold", labelpad=15, color=TEXT)
+
+# Title and text
+fig.suptitle(
+    "Gold holds value while TRUMP Coin falls after early speculation",
+    x=0.08, y=0.93, ha="left",
+    fontsize=22, fontweight="bold", color=TEXT
+)
+
+fig.text(
+    0.08, 0.865,
+    "Both assets start at 100, so it is easier to compare them.\n"
+    "Gold moves up more slowly and steadily.\n"
+    "TRUMP Coin rises quickly in the beginning, but then drops a lot.",
+    fontsize=12, color=SUB, ha="left", va="top",
+    linespacing=1.35, style="italic"
+)
+
+# Legend
+fig.text(0.08, 0.775, "━ Gold", fontsize=15, color=GOLD, fontweight="bold")
+fig.text(0.18, 0.775, "━ TRUMP Coin", fontsize=15, color=TRUMP, fontweight="bold")
+
+# Labels
+ax.text(-0.10, 1.02, "PERFORMANCE INDEX",
+        transform=ax.transAxes, fontsize=11, fontweight="bold", color=TEXT)
+
+ax.text(combined["date"].min() - pd.Timedelta(days=70), 100,
+        "Start = 100", fontsize=11, color=SUB, style="italic", va="center")
+
+for asset_df, name, color in [
+    (gold_df, "Gold", GOLD),
+    (trump_df, "TRUMP Coin", TRUMP)
+]:
+    last = asset_df.iloc[-1]
+    ax.text(last["date"] + pd.Timedelta(days=10),
+            last["Performance Index"],
+            name,
+            color=color,
+            fontsize=13,
+            fontweight="bold")
+
+# Notes
+g_point = gold_df.iloc[int(len(gold_df) * 0.6)]
+t_point = trump_df.iloc[int(len(trump_df) * 0.7)]
+
+# this annotation is for the gold to emphasize the steady growth of it.
+ax.annotate(
+    "Steadier growth path",
+    xy=(g_point["date"], g_point["Performance Index"]),
+    xytext=(g_point["date"] - pd.Timedelta(days=80), 150),
+    fontsize=12, color=TEXT,
+    arrowprops=dict(arrowstyle="-", color=TEXT)
+)
+# this annotation is for the trump coin to emphasize the risk with this.
+ax.annotate(
+    "Early spikes do not last",
+    xy=(t_point["date"], t_point["Performance Index"]),
+    xytext=(t_point["date"] - pd.Timedelta(days=100), 45),
+    fontsize=12, color=TEXT,
+    arrowprops=dict(arrowstyle="-", color=TEXT)
+)
+
+
+# Main takeaway, this is going to give us a clear description on the top right side so that the main takeaway is clear.
+fig.text(
+    0.80, 0.90,
+    "Main takeaway:\n\nGold is more stable,\nwhile TRUMP Coin\nloses value over time.",
+    fontsize=13, color=TEXT, ha="left", va="top",
+    bbox=dict(facecolor="#E8E8E8", edgecolor="#444", boxstyle="round,pad=0.6")
+)
+
+plt.subplots_adjust(left=0.12, right=0.92, top=0.70, bottom=0.12)
+
+plt.savefig(
+    "figures/Trumpcoin_vs_Gold.png",
+    dpi=250,
+    bbox_inches="tight",
+    facecolor=fig.get_facecolor()
+)
+
+plt.show()
+
+
+
+
+
+
+
