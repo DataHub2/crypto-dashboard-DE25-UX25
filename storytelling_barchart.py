@@ -132,4 +132,3 @@ plt.subplots_adjust(left=0.2, top=0.82, right=0.95, bottom=0.15)
 #  getting the barchart into the figures map 
 fig.savefig("figures/volatility_barchart.png", dpi=250, bbox_inches='tight', facecolor=fig.get_facecolor())
 plt.show()
-
