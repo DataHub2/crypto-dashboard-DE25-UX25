@@ -96,7 +96,7 @@ ax.set_xlabel("DAILY VOLATILITY (STANDARD DEVIATION %)", fontweight='bold', loc=
 ax.tick_params(axis='x', colors=TEXT_COLOR, length=0, labelsize=10)
 ax.tick_params(axis='y', length=0, labelsize=10, colors=TEXT_COLOR)
 
-# Top-left alignment label -- Assert teller for the Y axis.
+# Top-left alignment label -- Assert teller for the Y axis. 
 ax.text(-0.02, 1.05, 'ASSET', transform=ax.transAxes, fontweight='bold', color=TEXT_COLOR, ha='right')
 
 #  Annotation 
@@ -111,7 +111,7 @@ try:
     max_val = max(df_plot.loc[y_btc, 'Volatility'], df_plot.loc[y_gold, 'Volatility']) # Get the maximum volatility value between Bitcoin and Gold to position the bracket and text.
 
     #  bracket and text
-    ax.text(max_val + 0.3, y_mid - 0.1, '}', fontsize=42, color=TEXT_COLOR, va='center', ha='left', weight='light')
+    ax.text(max_val + 0.3, y_mid - 0.1, '}', fontsize=50, color=TEXT_COLOR, va='center', ha='left', weight='light')
     ax.text(max_val + 0.8, y_mid, 'provides predictable risk exposure', fontsize=11, color=TEXT_COLOR, va='center', ha='left')
 except IndexError:
     pass 
@@ -121,14 +121,16 @@ except IndexError:
 
 # Here i want to emphasize explanotory text to get good storytelling, so that the customor gets good insight.
 fig.suptitle("Which assets expose portfolios to extreme daily price fluctuations?", 
-             x=0.1, y=0.96, ha='left', fontsize=14, color=TEXT_COLOR, fontweight='bold')
+             x=0.135, y=0.96, ha='left', fontsize=14, color=TEXT_COLOR, fontweight='bold')
 
 # Subtitle to explain to the customeer
-ax.text(0, 1.10, "Measured by the standard deviation of daily returns. Higher values dictate higher systemic risk.", 
+ax.text(-0.085, 1.10, "Measured by the standard deviation of daily returns. Higher values dictate higher systemic risk.", 
         transform=ax.transAxes, fontsize=10, color='#666666', ha='left', style='italic')
 
 plt.subplots_adjust(left=0.2, top=0.82, right=0.95, bottom=0.15)
 
 #  getting the barchart into the figures map 
-fig.savefig("figures/volatility_barchart.png", dpi=250, bbox_inches='tight', facecolor=fig.get_facecolor())
-plt.show()
+fig.savefig("zakaria_storytelling/figures/volatility_barchart_final.png", dpi=250, bbox_inches='tight', facecolor=fig.get_facecolor())
+
+
+

@@ -48,7 +48,7 @@ trump_df = combined[combined["Asset"] == "TRUMP Coin"]
 # Colors, added gold color to match "Gold" and red color to match "TRUMP Coin"
 # Note i got help with the colors and figure design from the LLM, i wanted to make sure that the colors are not to bright and also that they match the assets that they represent.
 BG, TEXT, SUB, GRID = "#E5E7E8", "#222222", "#555555", "#D0D0D0"
-GOLD, TRUMP = "#8A5E13", "#A30F18"
+GOLD, TRUMP = "#8A5E13", "#5C63E3"
 
 fig, ax = plt.subplots(figsize=(18, 10))
 fig.patch.set_facecolor(BG)
@@ -76,12 +76,12 @@ ax.set_xlabel("DATE", fontweight="bold", labelpad=15, color=TEXT)
 # Title and text
 fig.suptitle(
     "Gold holds value while TRUMP Coin falls after early speculation",
-    x=0.08, y=0.93, ha="left",
+    x=0.09, y=0.93, ha="left",
     fontsize=22, fontweight="bold", color=TEXT
 )
 
 fig.text(
-    0.08, 0.865,
+    0.09, 0.865,
     "Both assets start at 100, so it is easier to compare them.\n"
     "Gold moves up more slowly and steadily.\n"
     "TRUMP Coin rises quickly in the beginning, but then drops a lot.",
@@ -90,15 +90,22 @@ fig.text(
 )
 
 # Legend
-fig.text(0.08, 0.775, "━ Gold", fontsize=15, color=GOLD, fontweight="bold")
+fig.text(0.10, 0.775, "━ Gold", fontsize=15, color=GOLD, fontweight="bold")
 fig.text(0.18, 0.775, "━ TRUMP Coin", fontsize=15, color=TRUMP, fontweight="bold")
 
 # Labels
-ax.text(-0.10, 1.02, "PERFORMANCE INDEX",
+ax.text(-0.028, 1.02, "PERFORMANCE INDEX",
         transform=ax.transAxes, fontsize=11, fontweight="bold", color=TEXT)
 
-ax.text(combined["date"].min() - pd.Timedelta(days=70), 100,
-        "Start = 100", fontsize=11, color=SUB, style="italic", va="center")
+ax.text(
+    combined["date"].min() - pd.Timedelta(days=-300),
+    103,
+    "Start = 100",
+    fontsize=11,
+    color=SUB,
+    style="italic",
+    va="bottom"
+)
 
 for asset_df, name, color in [
     (gold_df, "Gold", GOLD),
@@ -136,7 +143,7 @@ ax.annotate(
 
 # Main takeaway, this is going to give us a clear description on the top right side so that the main takeaway is clear.
 fig.text(
-    0.80, 0.90,
+    0.575, 0.865,
     "Main takeaway:\n\nGold is more stable,\nwhile TRUMP Coin\nloses value over time.",
     fontsize=13, color=TEXT, ha="left", va="top",
     bbox=dict(facecolor="#E8E8E8", edgecolor="#444", boxstyle="round,pad=0.6")
@@ -145,13 +152,13 @@ fig.text(
 plt.subplots_adjust(left=0.12, right=0.92, top=0.70, bottom=0.12)
 
 plt.savefig(
-    "figures/Trumpcoin_vs_Gold.png",
+    "zakaria_storytelling/figures/Trumpcoin_vs_Gold_final.png",
     dpi=250,
     bbox_inches="tight",
     facecolor=fig.get_facecolor()
 )
 
-plt.show()
+
 
 
 
